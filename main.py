@@ -1,5 +1,6 @@
 from flask import Flask, request
 from pynput import keyboard
+import time
 
 app = Flask(__name__)
 
@@ -30,14 +31,49 @@ def press_keyCrtl():
     
 
     # simulate the pressing of the keys
-    keyboard.Controller().press(getattr(keyboard.Key, keys[0]))
-    keyboard.Controller().press(keyboard.KeyCode.from_char(keys[1]))
+    
 
-    # do something here that requires the "Ctrl" + "Shift" + "A" keys to be pressed
+    if keys[1]=='up' :
+        for i in range(40):
+            keyboard.Controller().press(getattr(keyboard.Key, keys[0]))
+            keyboard.Controller().press(keyboard.Key.up)
+            keyboard.Controller().release(getattr(keyboard.Key, keys[0]))
+            keyboard.Controller().release(keyboard.Key.up)
+    elif keys[1]=='down':
+        for i in range(40):
+            keyboard.Controller().press(getattr(keyboard.Key, keys[0]))
+            keyboard.Controller().press(keyboard.Key.down)
+            keyboard.Controller().release(getattr(keyboard.Key, keys[0]))
+            keyboard.Controller().release(keyboard.Key.down)
+    else:
+        keyboard.Controller().press(getattr(keyboard.Key, keys[0]))
+        keyboard.Controller().press(keyboard.KeyCode.from_char(keys[1]))
+        keyboard.Controller().release(getattr(keyboard.Key, keys[0]))
+        keyboard.Controller().release(keyboard.KeyCode.from_char(keys[1]))
 
-    # release the keys
-    keyboard.Controller().release(getattr(keyboard.Key, keys[0]))
-    keyboard.Controller().release(keyboard.KeyCode.from_char(keys[1]))
+
+    # if keys[1]=='up' :
+    #     keyboard.Controller().press(keyboard.Key.up)
+    # elif keys[1]=='down':
+        
+    #     keyboard.Controller().press(keyboard.Key.down)
+    # else:
+    #     keyboard.Controller().press(keyboard.KeyCode.from_char(keys[1]))
+
+    # # do something here that requires the "Ctrl" + "Shift" + "A" keys to be pressed
+
+    # # release the keys
+    # keyboard.Controller().release(getattr(keyboard.Key, keys[0]))
+    # if keys[1]=='up' :
+
+    #     keyboard.Controller().release(keyboard.Key.up)
+    # elif keys[1]=='down':
+    #     keyboard.Controller().release(keyboard.Key.down)
+    # else:
+    #     keyboard.Controller().release(keyboard.KeyCode.from_char(keys[1]))
+
+    
+    
 
     return 'Key pressed'
 
@@ -66,15 +102,6 @@ def press_keyShiftAlt():
     return 'Key pressed'
 
 
-@app.route("/getMarkers")#questo è solo per sviluppare in contemporanea busyBox
-def getMarkers():
-    marker={
-        "markerId": 'marker1',
-        "positionLat": "45.07016911822664",
-        "positionLong": "7.681254172297709",
-        "infoWindow": "Test1"
-    }
-    return marker
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
